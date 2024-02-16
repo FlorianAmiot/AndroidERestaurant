@@ -130,6 +130,7 @@ fun MenuView(type: DishType) {
                 Modifier
                     .align(alignment = Alignment.CenterVertically)
                     .padding(8.dp)
+                    .weight(5f)
             )
             Spacer(Modifier.weight(1f))
             Text("${dish.prices.first().price} €",

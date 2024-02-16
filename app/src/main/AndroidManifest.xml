@@ -16,6 +16,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".basket.BasketActivity"
+            android:exported="false"
+            android:label="@string/title_activity_basket"
+            android:theme="@style/Theme.AndroidERestaurant" />
+        <activity
             android:name=".DetailActivity"
             android:exported="false"
             android:label="@string/title_activity_detail"

@@ -1,5 +1,6 @@
 package fr.isen.amiot.androiderestaurant
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,8 +30,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import fr.isen.amiot.androiderestaurant.basket.Basket
+import fr.isen.amiot.androiderestaurant.basket.BasketActivity
 import fr.isen.amiot.androiderestaurant.network.Dish
 import fr.isen.amiot.androiderestaurant.ui.theme.AndroidERestaurantTheme
+
 
 class DetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,6 +104,7 @@ fun QuantitySelector(dish: Dish?) {
     //dish price string to float
     val priceInt = dish?.prices?.first()?.price?.toFloat() ?: 0f
     var totalPrice = priceInt * quantity
+    val context = LocalContext.current
     Column(
         modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -114,6 +120,19 @@ fun QuantitySelector(dish: Dish?) {
         }
         Button(onClick = { quantity++ }) {
             Text(text = "+")
+        }
+        Button(onClick = {
+            if (dish != null) {
+                Basket.current(context).add(dish, quantity, context)
+            }
+        }) {
+            Text("Commander")
+        }
+        Button(onClick = {
+            val intent = Intent(context, BasketActivity::class.java)
+            context.startActivity(intent)
+        }) {
+            Text("Voir mon panier")
         }
     }
     Text(
