@@ -2,6 +2,7 @@ package fr.isen.amiot.androiderestaurant
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -124,6 +125,7 @@ fun QuantitySelector(dish: Dish?) {
         Button(onClick = {
             if (dish != null) {
                 Basket.current(context).add(dish, quantity, context)
+                Toast.makeText(context, "Plat ajouté au panier", Toast.LENGTH_SHORT).show()
             }
         }) {
             Text("Commander")

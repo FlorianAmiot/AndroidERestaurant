@@ -57,9 +57,12 @@ class BasketActivity : ComponentActivity() {
         }
     }
     basketItems.addAll(Basket.current(context).items)
+
+
 }
 
-@Composable fun BasketItemView(item: BasketItem, basketItems: MutableList<BasketItem>) {
+@Composable
+fun BasketItemView(item: BasketItem, basketItems: MutableList<BasketItem>) {
     Card {
         val context = LocalContext.current
         Card(border =  BorderStroke(1.dp, Color.Black),
@@ -85,9 +88,13 @@ class BasketActivity : ComponentActivity() {
                 Column(
                     Modifier
                         .align(alignment = Alignment.CenterVertically)
-                        .padding(8.dp)
+                        .padding(horizontal = 8.dp)
+                        .weight(15f)
                 ) {
-                    Text(item.dish.name)
+                    Text(
+                        text = item.dish.name,
+                        maxLines = 2, // Afficher sur deux lignes au maximum
+                    )
                     Text("${item.dish.prices.first().price} €")
                 }
 
@@ -95,7 +102,7 @@ class BasketActivity : ComponentActivity() {
                 Text(item.count.toString(),
                     Modifier.align(alignment = Alignment.CenterVertically))
                 Button(onClick = {
-                    // delete item and redraw view
+                    // Supprimer l'article et réafficher la vue
                     Basket.current(context).delete(item, context)
                     basketItems.clear()
                     basketItems.addAll(Basket.current(context).items)
@@ -106,3 +113,5 @@ class BasketActivity : ComponentActivity() {
         }
     }
 }
+
+
