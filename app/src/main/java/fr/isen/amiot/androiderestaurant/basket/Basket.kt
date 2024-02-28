@@ -3,13 +3,15 @@ package fr.isen.amiot.androiderestaurant.basket
 import android.content.Context
 import com.google.gson.GsonBuilder
 import fr.isen.amiot.androiderestaurant.network.Dish
+import java.math.BigDecimal
 
 
 class Basket {
     var items: MutableList<BasketItem> = mutableListOf()
 
+
     fun add(dish: Dish, count: Int, context: Context) {
-        val existingItem = items.firstOrNull { it.dish == dish }
+        val existingItem = items.firstOrNull { it.dish.name == dish.name }
         existingItem?.let {
             it.count = it.count + count
         } ?: run {
@@ -17,6 +19,7 @@ class Basket {
         }
         save(context)
     }
+
 
     fun delete(item: BasketItem, context: Context) {
         items.removeAll { item.dish.name == it.dish.name }
@@ -31,6 +34,18 @@ class Basket {
         editor.putString(BASKET_PREFERENCES_KEY, json)
         editor.apply()
     }
+
+    fun calculateTotalPrice(basketItems: List<BasketItem>): BigDecimal {
+        var totalPrice = BigDecimal.ZERO
+        for (item in basketItems) {
+            val itemPrice = BigDecimal(item.dish.prices.first().price)
+            totalPrice += itemPrice * BigDecimal(item.count)
+        }
+        return totalPrice
+    }
+
+
+
     companion object {
         fun current(context: Context): Basket {
             val sharedPreferences = context.getSharedPreferences(USER_PREFERENCES_NAME, Context.MODE_PRIVATE)

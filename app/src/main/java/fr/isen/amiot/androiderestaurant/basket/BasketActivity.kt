@@ -36,30 +36,72 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import fr.isen.amiot.androiderestaurant.R
 import fr.isen.amiot.androiderestaurant.basket.ui.theme.AndroidERestaurantTheme
+import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 
 class BasketActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BasketView()
+            AndroidERestaurantTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    BasketView()
+                }
+            }
         }
     }
 }
 
-@Composable fun BasketView() {
+
+
+@Composable
+fun BasketView() {
     val context = LocalContext.current
     val basketItems = remember {
         mutableStateListOf<BasketItem>()
     }
-    LazyColumn {
-        items(basketItems) {
-            BasketItemView(it,basketItems)
-        }
-    }
+
+    basketItems.clear() // Effacez la liste existante pour éviter les duplications
     basketItems.addAll(Basket.current(context).items)
 
+    val totalPrice = Basket.current(context).calculateTotalPrice(basketItems) // Obtenir le prix total
 
+    Column(modifier = Modifier.fillMaxSize()) {
+        if (basketItems.isNotEmpty()) {
+            LazyColumn(modifier = Modifier.weight(1f)) {
+                items(basketItems) {
+                    BasketItemView(it, basketItems)
+                }
+            }
+            Button(
+                onClick = {
+                    // Simuler le passage de la commande
+                    Toast.makeText(context, "Commande effectuée", Toast.LENGTH_SHORT).show()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text("Commander ($totalPrice €)") // Afficher le prix total entre parenthèses
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Panier vide")
+            }
+        }
+    }
 }
+
 
 @Composable
 fun BasketItemView(item: BasketItem, basketItems: MutableList<BasketItem>) {
@@ -76,8 +118,8 @@ fun BasketItemView(item: BasketItem, basketItems: MutableList<BasketItem>) {
                         .data(item.dish.images.first())
                         .build(),
                     null,
-                    placeholder = painterResource(R.drawable.ic_launcher_foreground),
-                    error = painterResource(R.drawable.ic_launcher_foreground),
+                    placeholder = painterResource(R.drawable.image_plat),
+                    error = painterResource(R.drawable.image_plat),
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .width(80.dp)

@@ -84,7 +84,7 @@ class HomeActivity : ComponentActivity(), MenuInterface {
 @Composable
 fun SetupView(menu: MenuInterface) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(painterResource(R.drawable.ic_launcher_foreground), null)
+        Image(painterResource(R.drawable.start_image), null)
         CustomButton(type = DishType.STARTER, menu)
         Divider()
         CustomButton(type = DishType.MAIN, menu)

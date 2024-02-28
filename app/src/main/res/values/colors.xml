@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="blue_80">#FF0000FF</color> <!-- Bleu foncé -->
+    <color name="blue_sea_80">#FF008080</color> <!-- Bleu mer foncé -->
+    <color name="blue_light_80">#FFADD8E6</color> <!-- Bleu clair -->
+    <color name="blue_40">#FF6495ED</color> <!-- Bleu clair -->
+    <color name="blue_sea_40">#FFAFEEEE</color> <!-- Bleu mer clair -->
+    <color name="blue_light_40">#FFE6F0F8</color> <!-- Bleu foncé -->
 </resources>

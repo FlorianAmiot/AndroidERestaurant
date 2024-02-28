@@ -8,18 +8,29 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -31,13 +42,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.GsonBuilder
+import fr.isen.amiot.androiderestaurant.basket.Basket
+import fr.isen.amiot.androiderestaurant.basket.BasketActivity
 import fr.isen.amiot.androiderestaurant.network.Category
 import fr.isen.amiot.androiderestaurant.network.Dish
 import fr.isen.amiot.androiderestaurant.network.MenuResult
@@ -52,7 +67,9 @@ class MenuActivity : ComponentActivity() {
         val type = (intent.getSerializableExtra(CATEGROY_EXTRA_KEY) as? DishType) ?: DishType.STARTER
 
         setContent {
-            MenuView(type)
+            AndroidERestaurantTheme {
+                MenuView(type)
+            }
         }
         Log.d("lifeCycle", "Menu Activity - OnCreate")
     }
@@ -77,17 +94,62 @@ class MenuActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenuView(type: DishType) {
     val category = remember {
         mutableStateOf<Category?>(null)
     }
+
+    val context = LocalContext.current
+
+
     Column(Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally) {
+        TopAppBar(
+            title = {
+                Text(
+                    text = "Plat",
+                    modifier = Modifier.weight(300f),
+                    textAlign = TextAlign.Center
+                )
+            },
+            actions = {
+                Box(contentAlignment = Alignment.Center) {
+                }
+
+                val numberOfItemsInCart = Basket.current(context).items.sumBy { it.count
+                }
+                IconButton(onClick = { val intent = Intent(context, BasketActivity::class.java)
+                    context.startActivity(intent)}) {
+                    Icon(Icons.Filled.ShoppingCart, contentDescription = "Panier")
+                }
+                // Pastille pour afficher le nombre d'articles dans le panier
+                if (numberOfItemsInCart > 0) {
+                    Surface(
+                        color = Color.Red,
+                        shape = MaterialTheme.shapes.small,
+                        modifier = Modifier
+                            .size(16.dp)
+                            .offset(-18.dp, (-13).dp) // Décalage pour le placer dans le coin supérieur droit
+                    ) {
+                        Text(
+                            text = numberOfItemsInCart.toString(),
+                            color = Color.White,
+                            fontSize =  8.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(2.dp)
+                        )
+                    }
+                }
+
+            }
+        )
+
         Text(type.title())
         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             category.value?.let {
-                items(it.items) {
+                items(it.items) { it ->
                     dishRow(it)
                 }
             }
@@ -106,7 +168,9 @@ fun MenuView(type: DishType) {
                 val intent = Intent(context, DetailActivity::class.java)
                 intent.putExtra(DetailActivity.DISH_EXTRA_KEY, dish)
                 intent.putExtra(DetailActivity.DISH_IMAGE_EXTRA_KEY, dish.images.first())
-                intent.putExtra(DetailActivity.DISH_INGREDIENTS_EXTRA_KEY, dish.ingredients.joinToString (", "){ it.name })
+                intent.putExtra(
+                    DetailActivity.DISH_INGREDIENTS_EXTRA_KEY,
+                    dish.ingredients.joinToString(", ") { it.name })
                 intent.putExtra(DetailActivity.DISH_PRICE_EXTRA_KEY, dish.prices.first().price)
                 context.startActivity(intent)
             }
@@ -117,8 +181,8 @@ fun MenuView(type: DishType) {
                     .data(dish.images.first())
                     .build(),
                 null,
-                placeholder = painterResource(R.drawable.ic_launcher_foreground),
-                error = painterResource(R.drawable.ic_launcher_foreground),
+                placeholder = painterResource(R.drawable.image_plat),
+                error = painterResource(R.drawable.image_plat),
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .width(80.dp)

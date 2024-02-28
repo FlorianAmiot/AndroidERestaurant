@@ -16,15 +16,16 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = BlueSea80, // Couleur primaire bleu foncé
+    secondary = BlueSea80, // Couleur secondaire bleu mer foncé
+    tertiary = BlueLight80 // Couleur tertiaire bleu clair
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = Blue40, // Couleur primaire bleu clair
+    secondary = BlueSea40, // Couleur secondaire bleu mer clair
+    tertiary = BlueLight40 // Couleur tertiaire bleu clair
+)
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -35,7 +36,7 @@ private val LightColorScheme = lightColorScheme(
     onBackground = Color(0xFF1C1B1F),
     onSurface = Color(0xFF1C1B1F),
     */
-)
+
 
 @Composable
 fun AndroidERestaurantTheme(
