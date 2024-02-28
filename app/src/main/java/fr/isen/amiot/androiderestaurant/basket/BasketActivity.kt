@@ -134,7 +134,7 @@ fun BasketItemView(item: BasketItem, basketItems: MutableList<BasketItem>) {
                     Modifier
                         .align(alignment = Alignment.CenterVertically)
                         .padding(horizontal = 8.dp)
-                        .weight(5f)
+                        .weight(15f)
                 ) {
                     Text(
                         text = item.dish.name,
