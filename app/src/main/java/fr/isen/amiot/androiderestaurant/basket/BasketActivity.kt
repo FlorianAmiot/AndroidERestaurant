@@ -37,6 +37,7 @@ import coil.request.ImageRequest
 import fr.isen.amiot.androiderestaurant.R
 import fr.isen.amiot.androiderestaurant.basket.ui.theme.AndroidERestaurantTheme
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 
 class BasketActivity : ComponentActivity() {
@@ -44,7 +45,6 @@ class BasketActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AndroidERestaurantTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -72,7 +72,10 @@ fun BasketView() {
 
     Column(modifier = Modifier.fillMaxSize()) {
         if (basketItems.isNotEmpty()) {
-            LazyColumn(modifier = Modifier.weight(1f)) {
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(16.dp) // Espacement vertical entre chaque élément
+            )  {
                 items(basketItems) {
                     BasketItemView(it, basketItems)
                 }
@@ -131,7 +134,7 @@ fun BasketItemView(item: BasketItem, basketItems: MutableList<BasketItem>) {
                     Modifier
                         .align(alignment = Alignment.CenterVertically)
                         .padding(horizontal = 8.dp)
-                        .weight(15f)
+                        .weight(5f)
                 ) {
                     Text(
                         text = item.dish.name,
