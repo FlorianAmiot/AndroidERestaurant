@@ -109,7 +109,7 @@ fun MenuView(type: DishType) {
         TopAppBar(
             title = {
                 Text(
-                    text = "Plat",
+                    text = "Menu",
                     modifier = Modifier.weight(300f),
                     textAlign = TextAlign.Center
                 )

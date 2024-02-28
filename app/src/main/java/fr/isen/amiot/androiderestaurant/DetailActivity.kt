@@ -144,6 +144,7 @@ fun DishDetailView(
                     .data(dish.images.first())
                     .build(),
                 null,
+                modifier = Modifier.size(300.dp),
                 placeholder = painterResource(R.drawable.image_plat),
                 error = painterResource(R.drawable.image_plat)
             )
@@ -194,13 +195,13 @@ fun QuantitySelector(dish: Dish?) {
         Row {
             Button(
                 onClick = { if (quantity > 1) quantity-- },
-                modifier = Modifier.padding(end = 8.dp) // Ajouter de l'espace à droite du bouton "-"
+                modifier = Modifier.padding(end = 5.dp)
             ) {
                 Text(text = "-")
             }
             Button(
                 onClick = { quantity++ },
-                modifier = Modifier.padding(start = 8.dp) // Ajouter de l'espace à gauche du bouton "+"
+                modifier = Modifier.padding(start = 5.dp)
             ) {
                 Text(text = "+")
             }
@@ -220,10 +221,15 @@ fun QuantitySelector(dish: Dish?) {
         }
     }
 
-    Text(
-        text = "Total: $totalPrice €",
-        fontSize = 16.sp,
-        textAlign = TextAlign.Center,
-        modifier = Modifier.padding(8.dp)
-    )
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        color = Color.Gray,
+    ) {
+        Text(
+            text = "Total: $totalPrice €",
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(8.dp)
+        )
+    }
 }
