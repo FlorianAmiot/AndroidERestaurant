@@ -39,6 +39,8 @@ import fr.isen.amiot.androiderestaurant.basket.ui.theme.AndroidERestaurantTheme
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.unit.sp
 
 class BasketActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +73,13 @@ fun BasketView() {
     val totalPrice = Basket.current(context).calculateTotalPrice(basketItems) // Obtenir le prix total
 
     Column(modifier = Modifier.fillMaxSize()) {
+        Text(
+            text = "Votre panier :",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            fontSize =  25.sp,
+        )
         if (basketItems.isNotEmpty()) {
             LazyColumn(
                 modifier = Modifier.weight(1f),
@@ -108,52 +117,62 @@ fun BasketView() {
 
 @Composable
 fun BasketItemView(item: BasketItem, basketItems: MutableList<BasketItem>) {
-    Card {
+    Card(border =  BorderStroke(1.dp, Color.Black),
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+    ) {
         val context = LocalContext.current
-        Card(border =  BorderStroke(1.dp, Color.Black),
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
+        Row(
+            Modifier.padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(Modifier.padding(8.dp)) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(item.dish.images.first())
-                        .build(),
-                    null,
-                    placeholder = painterResource(R.drawable.image_plat),
-                    error = painterResource(R.drawable.image_plat),
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .width(80.dp)
-                        .height(80.dp)
-                        .clip(RoundedCornerShape(10))
-                        .padding(8.dp)
-                )
-                Column(
-                    Modifier
-                        .align(alignment = Alignment.CenterVertically)
-                        .padding(horizontal = 8.dp)
-                        .weight(15f)
-                ) {
-                    Text(
-                        text = item.dish.name,
-                        maxLines = 2, // Afficher sur deux lignes au maximum
-                    )
-                    Text("${item.dish.prices.first().price} €")
-                }
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(item.dish.images.first())
+                    .build(),
+                contentDescription = null,
+                placeholder = painterResource(R.drawable.image_plat),
+                error = painterResource(R.drawable.image_plat),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(10))
+            )
+            Column(
+                Modifier
+                    .padding(horizontal = 8.dp)
+                    .weight(1f)
+            ) {
+                Text(
+                    text = item.dish.name,
+                    maxLines = 2, // Afficher sur deux lignes au maximum
 
-                Spacer(Modifier.weight(1f))
-                Text(item.count.toString(),
-                    Modifier.align(alignment = Alignment.CenterVertically))
-                Button(onClick = {
+                )
+                Text(
+                    "${item.dish.prices.first().price} €",
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text(
+                item.count.toString(),
+                Modifier
+                    .padding(end = 8.dp)
+                    .align(alignment = Alignment.CenterVertically)
+            )
+
+            Button(
+                onClick = {
                     // Supprimer l'article et réafficher la vue
                     Basket.current(context).delete(item, context)
                     basketItems.clear()
                     basketItems.addAll(Basket.current(context).items)
-                }) {
-                    Text("X")
-                }
+                },
+            ) {
+                Text("X")
             }
         }
     }
