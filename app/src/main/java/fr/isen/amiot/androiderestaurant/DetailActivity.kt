@@ -103,7 +103,8 @@ fun DishDetailView(
                 title = {
                     Text(
                         text = "Détails du plat",
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
                     )
             },
             actions = {
