@@ -83,7 +83,7 @@ fun BasketView() {
         if (basketItems.isNotEmpty()) {
             LazyColumn(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(16.dp) // Espacement vertical entre chaque élément
+                verticalArrangement = Arrangement.spacedBy(8.dp) // Espacement vertical entre chaque élément
             )  {
                 items(basketItems) {
                     BasketItemView(it, basketItems)
